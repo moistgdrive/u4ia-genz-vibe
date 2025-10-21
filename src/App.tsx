@@ -8,21 +8,17 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// Determine basename dynamically so app works on both custom domain and project pages
+// Determine basename so app works on both custom domain and GitHub project pages
 function getRouterBase(): string {
-  const baseFromVite = (import.meta as any).env?.BASE_URL as string | undefined;
   if (typeof window !== 'undefined') {
     const host = window.location.hostname.toLowerCase();
     const isGithubPagesUserSite = host.endsWith('.github.io');
-    // If served from a GitHub project pages path, preserve pathname prefix
     if (isGithubPagesUserSite) {
-      // e.g., /u4ia-genz-vibe/ -> use that as basename
       const pathPrefix = window.location.pathname.split('/').filter(Boolean)[0];
       return pathPrefix ? `/${pathPrefix}/` : "/";
     }
   }
-  // Prefer vite base when available, otherwise root
-  return baseFromVite || "/";
+  return "/";
 }
 
 const App = () => (
